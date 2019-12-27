@@ -12,15 +12,18 @@ import Button from "@material-ui/core/Button";
 const useStyles = makeStyles({
   container: {
     padding: 24,
-    maxWidth: "50vw"
+    minWidth: "200px",
+    maxWidth: "400px",
+    minHeight: "100vh"
   },
   paper: {
-    //   marginTop: "30%",
-    //   width: 400,
-    //   height: 400
     padding: 24
   }
 });
+
+type CategoryEntry = {
+  [key: string]: { amount: string };
+};
 
 const App: React.FC = () => {
   const classes = useStyles();
@@ -29,34 +32,40 @@ const App: React.FC = () => {
     "Charity",
     "Savings",
     "Sinking Funds",
-    "End of Month Balance",
-    "Buffer",
-    "Buffer after Rent"
+    "End of Month Balance"
   ];
-  const initialState = inputs.map(input => {
-    return { name: input, amount: 0 };
+  let initialState: CategoryEntry = {};
+
+  // The following will output the shape {Credit Cards: {amount: 0}} ect..
+  inputs.forEach(input => {
+    initialState[input] = { amount: "0" };
   });
 
   const [entries, setEntry] = useState(initialState);
+  const [totalAmount, setTotalAmount] = useState(0);
 
   const handleChange = (value: string, name: string) => {
-    console.warn(`value: `, value);
-    console.warn(`name: `, name);
     setEntry(prevEntries => {
-      return { ...prevEntries, [name]: value };
+      return { ...prevEntries, [name]: { amount: value } };
     });
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    // const value;
-    console.warn(event.target);
-    console.warn(event.currentTarget);
     event.preventDefault();
+    const total = Object.keys(entries).reduce((previousValue, currentValue) => {
+      return parseInt(entries[currentValue].amount) + previousValue;
+    }, 0);
+    setTotalAmount(total);
   };
 
   return (
     <Grid container justify="center">
-      <Grid container className={classes.container} justify="center">
+      <Grid
+        container
+        alignItems="center"
+        className={classes.container}
+        justify="center"
+      >
         <Grid item xs={12}>
           <Paper className={classes.paper}>
             <Grid container justify="center" spacing={2}>
@@ -64,15 +73,18 @@ const App: React.FC = () => {
                 <Grid item xs={12}>
                   <Typography variant="h5">Account Buffer</Typography>
                 </Grid>
-                {inputs.map((name, index) => (
-                  <Label
-                    key={name}
-                    name={name}
-                    amount={entries[index].amount}
-                    handleChange={handleChange}
-                  ></Label>
-                ))}
-                <Grid item xs={12}>
+                {Object.keys(entries).map(entry => {
+                  return (
+                    <Label
+                      key={entry}
+                      name={entry}
+                      value={entries[entry].amount}
+                      handleChange={handleChange}
+                    />
+                  );
+                })}
+                <ResultLabel name="Buffer Amount" amount={totalAmount} />
+                <Grid container item xs={12} justify="flex-end">
                   <Button type="submit" variant="contained">
                     Submit
                   </Button>
@@ -88,7 +100,7 @@ const App: React.FC = () => {
 
 const Label = (props: {
   name: string;
-  amount: number;
+  value: string;
   handleChange: (value: string, name: string) => void;
 }) => {
   return (
@@ -101,13 +113,23 @@ const Label = (props: {
         fullWidth
         text-align="right"
         label={props.name}
-        value={props.amount}
+        value={props.value}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
           props.handleChange(e.target.value, props.name)
         }
         margin="normal"
         variant="standard"
       />
+    </Grid>
+  );
+};
+
+const ResultLabel = (props: { name: string; amount: number }) => {
+  return (
+    <Grid item xs={12}>
+      <Typography component="p">
+        {props.name}: ${props.amount}
+      </Typography>
     </Grid>
   );
 };
