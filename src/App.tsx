@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import logo from "./logo.svg";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
@@ -9,17 +10,27 @@ import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 
-const useStyles = makeStyles({
-  container: {
-    padding: 24,
-    minWidth: "200px",
-    maxWidth: "400px",
-    minHeight: "100vh"
-  },
-  paper: {
-    padding: 24
-  }
-});
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    container: {
+      [theme.breakpoints.down("sm")]: {
+        width: "100%",
+        minHeight: "100vh"
+      },
+      [theme.breakpoints.up("md")]: {
+        minWidth: "200px",
+        maxWidth: "400px",
+        minHeight: "100vh"
+      }
+    },
+    paper: {
+      padding: 24
+    },
+    form: {
+      width: "100%"
+    }
+  })
+);
 
 type CategoryEntry = {
   [key: string]: { amount: string };
@@ -27,6 +38,8 @@ type CategoryEntry = {
 
 const App: React.FC = () => {
   const classes = useStyles();
+  const mobile = useMediaQuery("(max-width:600px)");
+  console.warn(`is mobile?: ${mobile}`);
   const inputs = [
     "Credit Cards",
     "Charity",
@@ -68,8 +81,8 @@ const App: React.FC = () => {
       >
         <Grid item xs={12}>
           <Paper className={classes.paper}>
-            <Grid container justify="center" spacing={2}>
-              <form onSubmit={handleSubmit}>
+            <Grid container justify="center" text-align="center" spacing={2}>
+              <form onSubmit={handleSubmit} className={classes.form}>
                 <Grid item xs={12}>
                   <Typography variant="h5">Account Buffer</Typography>
                 </Grid>
@@ -83,11 +96,13 @@ const App: React.FC = () => {
                     />
                   );
                 })}
-                <ResultLabel name="Buffer Amount" amount={totalAmount} />
-                <Grid container item xs={12} justify="flex-end">
-                  <Button type="submit" variant="contained">
-                    Submit
-                  </Button>
+                <Grid container text-align="left" align-items="flex-end">
+                  <ResultLabel name="Buffer Amount" amount={totalAmount} />
+                  <Grid item xs={4}>
+                    <Button type="submit" fullWidth variant="contained">
+                      Submit
+                    </Button>
+                  </Grid>
                 </Grid>
               </form>
             </Grid>
@@ -126,7 +141,7 @@ const Label = (props: {
 
 const ResultLabel = (props: { name: string; amount: number }) => {
   return (
-    <Grid item xs={12}>
+    <Grid item xs={8}>
       <Typography component="p">
         {props.name}: ${props.amount}
       </Typography>
