@@ -1,6 +1,12 @@
 import React, { useState } from "react";
 import logo from "./logo.svg";
-import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
+import {
+  makeStyles,
+  createStyles,
+  Theme,
+  createMuiTheme,
+  ThemeProvider
+} from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
@@ -9,6 +15,13 @@ import "./App.css";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
+import CssBaseline from "@material-ui/core/CssBaseline";
+
+const theme = createMuiTheme({
+  palette: {
+    type: "dark"
+  }
+});
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -72,44 +85,47 @@ const App: React.FC = () => {
   };
 
   return (
-    <Grid container justify="center">
-      <Grid
-        container
-        alignItems="center"
-        className={classes.container}
-        justify="center"
-      >
-        <Grid item xs={12}>
-          <Paper className={classes.paper}>
-            <Grid container justify="center" text-align="center" spacing={2}>
-              <form onSubmit={handleSubmit} className={classes.form}>
-                <Grid item xs={12}>
-                  <Typography variant="h5">Account Buffer</Typography>
-                </Grid>
-                {Object.keys(entries).map(entry => {
-                  return (
-                    <Label
-                      key={entry}
-                      name={entry}
-                      value={entries[entry].amount}
-                      handleChange={handleChange}
-                    />
-                  );
-                })}
-                <Grid container text-align="left" align-items="flex-end">
-                  <ResultLabel name="Buffer Amount" amount={totalAmount} />
-                  <Grid item xs={4}>
-                    <Button type="submit" fullWidth variant="contained">
-                      Submit
-                    </Button>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Grid container justify="center">
+        <Grid
+          container
+          alignItems="center"
+          className={classes.container}
+          justify="center"
+        >
+          <Grid item xs={12}>
+            <Paper className={classes.paper}>
+              <Grid container justify="center" text-align="center" spacing={2}>
+                <form onSubmit={handleSubmit} className={classes.form}>
+                  <Grid item xs={12}>
+                    <Typography variant="h5">Account Buffer</Typography>
                   </Grid>
-                </Grid>
-              </form>
-            </Grid>
-          </Paper>
+                  {Object.keys(entries).map(entry => {
+                    return (
+                      <Label
+                        key={entry}
+                        name={entry}
+                        value={entries[entry].amount}
+                        handleChange={handleChange}
+                      />
+                    );
+                  })}
+                  <Grid container text-align="left" align-items="flex-end">
+                    <ResultLabel name="Buffer Amount" amount={totalAmount} />
+                    <Grid item xs={4}>
+                      <Button type="submit" fullWidth variant="contained">
+                        Submit
+                      </Button>
+                    </Grid>
+                  </Grid>
+                </form>
+              </Grid>
+            </Paper>
+          </Grid>
         </Grid>
       </Grid>
-    </Grid>
+    </ThemeProvider>
   );
 };
 
