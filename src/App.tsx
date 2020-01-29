@@ -113,7 +113,7 @@ const App: React.FC = () => {
                   })}
                   <Grid container text-align="left" align-items="flex-end">
                     <ResultLabel name="Buffer Amount" amount={totalAmount} />
-                    <Grid item xs={4}>
+                    <Grid item xs={12}>
                       <Button type="submit" fullWidth variant="contained">
                         Submit
                       </Button>
