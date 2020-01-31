@@ -36,6 +36,9 @@ const useStyles = makeStyles((theme: Theme) =>
         minHeight: "100vh"
       }
     },
+    hidden: {
+      display: 'none'
+    },
     paper: {
       padding: 24
     },
@@ -69,12 +72,15 @@ const App: React.FC = () => {
 
   const [entries, setEntry] = useState(initialState);
   const [totalAmount, setTotalAmount] = useState(0);
+  const [hidden, setHidden] = useState(false);
 
   const handleChange = (value: string, name: string) => {
     setEntry(prevEntries => {
       return { ...prevEntries, [name]: { amount: value } };
     });
   };
+
+  const handleToggleHide = () => setHidden(!hidden);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -96,7 +102,7 @@ const App: React.FC = () => {
         >
           <Grid item xs={12}>
             <Paper className={classes.paper}>
-              <Grid container justify="center" text-align="center" spacing={2}>
+              <Grid className={hidden ? classes.hidden : ''} container justify="center" text-align="center" spacing={2}>
                 <form onSubmit={handleSubmit} className={classes.form}>
                   <Grid item xs={12}>
                     <Typography variant="h5">Account Buffer</Typography>
@@ -121,6 +127,7 @@ const App: React.FC = () => {
                   </Grid>
                 </form>
               </Grid>
+              <Button fullWidth onClick={handleToggleHide}>Hide</Button>
             </Paper>
           </Grid>
         </Grid>
