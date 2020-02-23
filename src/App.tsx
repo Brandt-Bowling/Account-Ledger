@@ -51,8 +51,6 @@ type CategoryEntry = {
 
 const App: React.FC = () => {
   const classes = useStyles();
-  const mobile = useMediaQuery("(max-width:600px)");
-  console.warn(`is mobile?: ${mobile}`);
   const inputs = [
     "Credit Cards",
     "Charity",
@@ -64,7 +62,7 @@ const App: React.FC = () => {
 
   // The following will output the shape {Credit Cards: {amount: 0}} ect..
   inputs.forEach(input => {
-    initialState[input] = { amount: "0" };
+    initialState[input] = { amount: "" };
   });
 
   const [entries, setEntry] = useState(initialState);
