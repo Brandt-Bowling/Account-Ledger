@@ -1,26 +1,23 @@
 import React, { useState } from "react";
-import logo from "./logo.svg";
 import {
   makeStyles,
   createStyles,
   Theme,
   createMuiTheme,
-  ThemeProvider
+  ThemeProvider,
 } from "@material-ui/core/styles";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
 import Grid from "@material-ui/core/Grid";
-import TextField from "@material-ui/core/TextField";
-import InputAdornment from "@material-ui/core/InputAdornment";
 import "./App.css";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
+import { ResultLabel } from "./ResultLabel";
 
 const theme = createMuiTheme({
   palette: {
-    type: "dark"
-  }
+    type: "dark",
+  },
 });
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -28,20 +25,20 @@ const useStyles = makeStyles((theme: Theme) =>
     container: {
       [theme.breakpoints.down("sm")]: {
         width: "100%",
-        minHeight: "100vh"
+        minHeight: "100vh",
       },
       [theme.breakpoints.up("md")]: {
         minWidth: "200px",
         maxWidth: "400px",
-        minHeight: "100vh"
-      }
+        minHeight: "100vh",
+      },
     },
     paper: {
-      padding: 24
+      padding: 24,
     },
     form: {
-      width: "100%"
-    }
+      width: "100%",
+    },
   })
 );
 
@@ -56,12 +53,12 @@ const App: React.FC = () => {
     "Charity",
     "Savings",
     "Sinking Funds",
-    "End of Month Balance"
+    "End of Month Balance",
   ];
   let initialState: CategoryEntry = {};
 
   // The following will output the shape {Credit Cards: {amount: 0}} ect..
-  inputs.forEach(input => {
+  inputs.forEach((input) => {
     initialState[input] = { amount: "" };
   });
 
@@ -69,7 +66,7 @@ const App: React.FC = () => {
   const [totalAmount, setTotalAmount] = useState(0);
 
   const handleChange = (value: string, name: string) => {
-    setEntry(prevEntries => {
+    setEntry((prevEntries) => {
       return { ...prevEntries, [name]: { amount: value } };
     });
   };
@@ -99,7 +96,7 @@ const App: React.FC = () => {
                   <Grid item xs={12}>
                     <Typography variant="h5">Account Buffer</Typography>
                   </Grid>
-                  {Object.keys(entries).map(entry => {
+                  {Object.keys(entries).map((entry) => {
                     return (
                       <Label
                         key={entry}
@@ -124,42 +121,6 @@ const App: React.FC = () => {
         </Grid>
       </Grid>
     </ThemeProvider>
-  );
-};
-
-const Label = (props: {
-  name: string;
-  value: string;
-  handleChange: (value: string, name: string) => void;
-}) => {
-  return (
-    <Grid item xs={12}>
-      <TextField
-        InputProps={{
-          startAdornment: <InputAdornment position="start">$</InputAdornment>
-        }}
-        type="number"
-        fullWidth
-        text-align="right"
-        label={props.name}
-        value={props.value}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          props.handleChange(e.target.value, props.name)
-        }
-        margin="normal"
-        variant="standard"
-      />
-    </Grid>
-  );
-};
-
-const ResultLabel = (props: { name: string; amount: number }) => {
-  return (
-    <Grid item xs={8}>
-      <Typography component="p">
-        {props.name}: ${props.amount}
-      </Typography>
-    </Grid>
   );
 };
 
