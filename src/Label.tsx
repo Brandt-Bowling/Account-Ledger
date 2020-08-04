@@ -1,7 +1,7 @@
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
-import InputAdornment from '@material-ui/core/InputAdornment';
 import Grid from '@material-ui/core/Grid';
+import CustomNumber from './CustomNumber';
 
 export const Label = (props: {
   name: string;
@@ -12,15 +12,16 @@ export const Label = (props: {
     <Grid item xs={12}>
       <TextField
         InputProps={{
-          startAdornment: <InputAdornment position="start">$</InputAdornment>,
+          inputComponent: CustomNumber as any,
         }}
-        type="number"
         fullWidth
+        type="text"
         label={props.name}
         value={props.value}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
           props.handleChange(e.target.value, props.name)
         }
+        onFocus={(e: React.FocusEvent<HTMLInputElement>) => e.target.select()}
         margin="normal"
         variant="outlined"
       />

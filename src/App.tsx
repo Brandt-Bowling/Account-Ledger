@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   makeStyles,
   createStyles,
@@ -64,19 +64,18 @@ const App: React.FC = () => {
 
   const [entries, setEntry] = useState(initialState);
   const [totalAmount, setTotalAmount] = useState(0);
-
-  const handleChange = (value: string, name: string) => {
-    if (value.startsWith('0')) {
-      value = value.substring(1);
-    }
-    setEntry((prevEntries) => {
-      return { ...prevEntries, [name]: { amount: value } };
-    });
-
+  useEffect(() => {
     const total = inputs.reduce((prev, curr) => {
       return parseInt(entries[curr].amount) + prev;
     }, 0);
     setTotalAmount(total);
+  }, [entries, inputs]);
+
+  const handleChange = (value: string, name: string) => {
+    console.warn(`name ${name} value ${value}`);
+    setEntry((prevEntries) => {
+      return { ...prevEntries, [name]: { amount: value } };
+    });
   };
 
   return (
