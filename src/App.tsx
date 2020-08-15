@@ -12,6 +12,7 @@ import Paper from '@material-ui/core/Paper';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { ResultLabel } from './ResultLabel';
 import { Label } from './Label';
+import Typography from '@material-ui/core/Typography';
 
 const theme = createMuiTheme({
   palette: {
@@ -78,6 +79,10 @@ const App: React.FC = () => {
     });
   };
 
+  const handleDelete = (name: string) => {
+    return inputs.filter((category) => category !== name);
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -89,7 +94,7 @@ const App: React.FC = () => {
           justify="center"
         >
           <Paper className={classes.paper}>
-            <h2>Account Buffer</h2>
+            <Typography variant="h5">Account Buffer</Typography>
             {inputs.map((category) => {
               return (
                 <Label
