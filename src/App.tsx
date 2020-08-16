@@ -51,11 +51,17 @@ type CategoryEntry = {
 const App: React.FC = () => {
   const classes = useStyles();
   const inputs = [
-    'Credit Cards',
-    'Charity',
-    'Savings',
-    'Sinking Funds',
     'End of Month Balance',
+    'Freedom Unlimited (Brandt)',
+    'Freedom Unlimited (Hannah)',
+    'Freedom',
+    'Amazon',
+    'Charity | Tithes',
+    'Fun Money (Brandt)',
+    'Fun Money (Hannah)',
+    'Gifts',
+    'Doctor Appts',
+    'Misc',
   ];
 
   const initialState: CategoryEntry[] = inputs.map((input) => {
@@ -64,11 +70,6 @@ const App: React.FC = () => {
       amount: '0',
     };
   });
-
-  // The following will output the shape {Credit Cards: {amount: 0}} ect..
-  // inputs.forEach((input) => {
-  //   initialState[input] = { amount: '0' };
-  // });
 
   const [entries, setEntries] = useState(initialState);
   const [totalAmount, setTotalAmount] = useState(0);
@@ -80,16 +81,15 @@ const App: React.FC = () => {
   }, [entries, inputs]);
 
   const handleChange = (value: string, name: string) => {
-    setEntries((prevEntries) => {
-      const updated = entries.map((entry) => {
-        if (entry.name !== name) {
-          return entry;
-        }
+    const updated = entries.map((entry) => {
+      if (entry.name !== name) {
+        return entry;
+      }
 
-        return { ...entry, amount: value };
-      });
-      return [...updated];
+      return { ...entry, amount: value };
     });
+    const newState = [...updated];
+    setEntries(newState);
   };
 
   const handleDelete = (name: string) => {
