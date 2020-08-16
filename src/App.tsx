@@ -44,7 +44,8 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 type CategoryEntry = {
-  [key: string]: { amount: string };
+  name: string;
+  amount: string;
 };
 
 const App: React.FC = () => {
@@ -56,31 +57,44 @@ const App: React.FC = () => {
     'Sinking Funds',
     'End of Month Balance',
   ];
-  let initialState: CategoryEntry = {};
 
-  // The following will output the shape {Credit Cards: {amount: 0}} ect..
-  inputs.forEach((input) => {
-    initialState[input] = { amount: '0' };
+  const initialState: CategoryEntry[] = inputs.map((input) => {
+    return {
+      name: input,
+      amount: '0',
+    };
   });
 
-  const [entries, setEntry] = useState(initialState);
+  // The following will output the shape {Credit Cards: {amount: 0}} ect..
+  // inputs.forEach((input) => {
+  //   initialState[input] = { amount: '0' };
+  // });
+
+  const [entries, setEntries] = useState(initialState);
   const [totalAmount, setTotalAmount] = useState(0);
   useEffect(() => {
-    const total = inputs.reduce((prev, curr) => {
-      return parseInt(entries[curr].amount) + prev;
+    const total = entries.reduce((prev, curr) => {
+      return parseInt(curr.amount) + prev;
     }, 0);
     setTotalAmount(total);
   }, [entries, inputs]);
 
   const handleChange = (value: string, name: string) => {
-    console.warn(`name ${name} value ${value}`);
-    setEntry((prevEntries) => {
-      return { ...prevEntries, [name]: { amount: value } };
+    setEntries((prevEntries) => {
+      const updated = entries.map((entry) => {
+        if (entry.name !== name) {
+          return entry;
+        }
+
+        return { ...entry, amount: value };
+      });
+      return [...updated];
     });
   };
 
   const handleDelete = (name: string) => {
-    return inputs.filter((category) => category !== name);
+    const remainingEntries = entries.filter((entry) => entry.name !== name);
+    setEntries(remainingEntries);
   };
 
   return (
@@ -95,13 +109,14 @@ const App: React.FC = () => {
         >
           <Paper className={classes.paper}>
             <Typography variant="h5">Account Buffer</Typography>
-            {inputs.map((category) => {
+            {entries.map((entry) => {
               return (
                 <Label
-                  key={category}
-                  name={category}
-                  value={entries[category].amount}
+                  key={entry.name}
+                  name={entry.name}
+                  value={entry.amount}
                   handleChange={handleChange}
+                  handleDelete={handleDelete}
                 />
               );
             })}

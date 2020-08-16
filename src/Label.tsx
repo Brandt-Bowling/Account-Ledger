@@ -9,10 +9,11 @@ export const Label = (props: {
   name: string;
   value: string;
   handleChange: (value: string, name: string) => void;
+  handleDelete: (name: string) => void;
 }) => {
   return (
     <Grid container alignItems="center">
-      <Grid item xs={10}>
+      <Grid item xs={11}>
         <TextField
           InputProps={{
             inputComponent: CustomNumber as any,
@@ -29,8 +30,12 @@ export const Label = (props: {
           variant="outlined"
         />
       </Grid>
-      <Grid item xs={2}>
-        <IconButton>
+      <Grid item xs={1}>
+        <IconButton
+          onClick={(e: React.MouseEvent<HTMLButtonElement>) =>
+            props.handleDelete(props.name)
+          }
+        >
           <DeleteIcon />
         </IconButton>
       </Grid>
