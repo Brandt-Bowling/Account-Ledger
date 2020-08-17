@@ -51,7 +51,6 @@ type CategoryEntry = {
 const App: React.FC = () => {
   const classes = useStyles();
   const inputs = [
-    'End of Month Balance',
     'Freedom Unlimited (Brandt)',
     'Freedom Unlimited (Hannah)',
     'Freedom',
@@ -71,14 +70,24 @@ const App: React.FC = () => {
     };
   });
 
+  const [balance, setBalance] = useState('0');
   const [entries, setEntries] = useState(initialState);
   const [totalAmount, setTotalAmount] = useState(0);
+
   useEffect(() => {
-    const total = entries.reduce((prev, curr) => {
+    const totalEntries = entries.reduce((prev, curr) => {
       return parseInt(curr.amount) + prev;
     }, 0);
+    const total = parseInt(balance) - totalEntries;
     setTotalAmount(total);
-  }, [entries, inputs]);
+  }, [entries, inputs, balance]);
+
+  useEffect(() => {
+    const inputString = localStorage.getItem('inputs');
+    if (!inputString) {
+      localStorage.setItem('inputs', inputs.toString());
+    }
+  });
 
   const handleChange = (value: string, name: string) => {
     const updated = entries.map((entry) => {
@@ -109,18 +118,28 @@ const App: React.FC = () => {
         >
           <Paper className={classes.paper}>
             <Typography variant="h5">Account Buffer</Typography>
-            {entries.map((entry) => {
-              return (
-                <Label
-                  key={entry.name}
-                  name={entry.name}
-                  value={entry.amount}
-                  handleChange={handleChange}
-                  handleDelete={handleDelete}
-                />
-              );
-            })}
-            <ResultLabel name="Total" amount={totalAmount} />
+            <Grid container>
+              <Label
+                name={"Balance"}
+                value={balance}
+                handleChange={(value: string, name: string) => setBalance(value)}
+                handleDelete={handleDelete}
+              />
+            </Grid>
+            <Grid container alignItems="center">
+              {entries.map((entry) => {
+                return (
+                  <Label
+                    key={entry.name}
+                    name={entry.name}
+                    value={entry.amount}
+                    handleChange={handleChange}
+                    handleDelete={handleDelete}
+                  />
+                );
+              })}
+              <ResultLabel name="Total" amount={totalAmount} />
+            </Grid>
           </Paper>
         </Grid>
       </Grid>

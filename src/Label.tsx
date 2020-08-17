@@ -4,26 +4,31 @@ import Grid from '@material-ui/core/Grid';
 import CustomNumber from './CustomNumber';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
+import { TextFieldProps } from 'material-ui';
 
-export const Label = (props: {
+interface LabelProps extends TextFieldProps {
   name: string;
   value: string;
   handleChange: (value: string, name: string) => void;
   handleDelete: (name: string) => void;
-}) => {
+}
+
+export const Label = (props: LabelProps) => {
+  const { name, value, handleChange, handleDelete, ...rest } = props;
   return (
-    <Grid container alignItems="center">
-      <Grid item xs={11}>
+    <React.Fragment>
+      <Grid item xs={11} sm={5}>
         <TextField
           InputProps={{
             inputComponent: CustomNumber as any,
           }}
-          fullWidth
+          {...rest}
           type="text"
-          label={props.name}
-          value={props.value}
+          fullWidth
+          label={name}
+          value={value}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            props.handleChange(e.target.value, props.name)
+            handleChange(e.target.value, props.name)
           }
           onFocus={(e: React.FocusEvent<HTMLInputElement>) => e.target.select()}
           margin="normal"
@@ -33,12 +38,12 @@ export const Label = (props: {
       <Grid item xs={1}>
         <IconButton
           onClick={(e: React.MouseEvent<HTMLButtonElement>) =>
-            props.handleDelete(props.name)
+            handleDelete(name)
           }
         >
           <DeleteIcon />
         </IconButton>
       </Grid>
-    </Grid>
+    </React.Fragment>
   );
 };
