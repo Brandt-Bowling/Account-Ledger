@@ -9,15 +9,16 @@ import { TextFieldProps } from 'material-ui';
 interface LabelProps extends TextFieldProps {
   name: string;
   value: string;
+  hasDelete?: boolean;
   handleChange: (value: string, name: string) => void;
-  handleDelete: (name: string) => void;
+  handleDelete?: (name: string) => void;
 }
 
 export const Label = (props: LabelProps) => {
-  const { name, value, handleChange, handleDelete, ...rest } = props;
+  const { name, value, hasDelete = true, handleChange, handleDelete, ...rest } = props;
   return (
     <React.Fragment>
-      <Grid item xs={11} sm={5}>
+      <Grid item xs={11}>
         <TextField
           InputProps={{
             inputComponent: CustomNumber as any,
@@ -35,15 +36,21 @@ export const Label = (props: LabelProps) => {
           variant="outlined"
         />
       </Grid>
-      <Grid item xs={1}>
-        <IconButton
-          onClick={(e: React.MouseEvent<HTMLButtonElement>) =>
-            handleDelete(name)
-          }
-        >
-          <DeleteIcon />
-        </IconButton>
-      </Grid>
+      {hasDelete === true && (
+        <Grid item xs={1}>
+          <IconButton
+            onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+              if (handleDelete) {
+                handleDelete(name)
+                
+              }
+            }
+            }
+          >
+            <DeleteIcon />
+          </IconButton>
+        </Grid>
+      )}
     </React.Fragment>
   );
 };

@@ -5,7 +5,7 @@ import NumberFormat from 'react-number-format';
 
 export const ResultLabel = (props: { name: string; amount: number }) => {
   return (
-    <Grid item xs={8}>
+    <Grid item xs={10}>
       <Typography variant="subtitle1">{props.name}</Typography>
       <NumberFormat
         value={props.amount}

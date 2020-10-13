@@ -10,9 +10,13 @@ import Grid from '@material-ui/core/Grid';
 import './App.css';
 import Paper from '@material-ui/core/Paper';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
 import { ResultLabel } from './ResultLabel';
 import { Label } from './Label';
 import Typography from '@material-ui/core/Typography';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
 
 const theme = createMuiTheme({
   palette: {
@@ -29,7 +33,7 @@ const useStyles = makeStyles((theme: Theme) =>
       },
       [theme.breakpoints.up('md')]: {
         minWidth: '200px',
-        maxWidth: '1000px',
+        maxWidth: '75vw',
         minHeight: '100vh',
       },
     },
@@ -76,9 +80,9 @@ const App: React.FC = () => {
 
   useEffect(() => {
     const totalEntries = entries.reduce((prev, curr) => {
-      return parseInt(curr.amount) + prev;
+      return parseFloat(curr.amount) + prev;
     }, 0);
-    const total = parseInt(balance) - totalEntries;
+    const total = parseFloat(balance) - totalEntries;
     setTotalAmount(total);
   }, [entries, inputs, balance]);
 
@@ -106,6 +110,8 @@ const App: React.FC = () => {
     setEntries(remainingEntries);
   };
 
+  const handleAdd = () => {};
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -120,10 +126,10 @@ const App: React.FC = () => {
             <Typography variant="h5">Account Buffer</Typography>
             <Grid container>
               <Label
-                name={"Balance"}
+                name={'Starting Balance'}
                 value={balance}
-                handleChange={(value: string, name: string) => setBalance(value)}
-                handleDelete={handleDelete}
+                hasDelete={false}
+                handleChange={(value: string) => setBalance(value)}
               />
             </Grid>
             <Grid container alignItems="center">
@@ -139,6 +145,11 @@ const App: React.FC = () => {
                 );
               })}
               <ResultLabel name="Total" amount={totalAmount} />
+              <Grid item xs={2}>
+                <Fab color="primary" onClick={handleAdd}>
+                  <AddIcon></AddIcon>
+                </Fab>
+              </Grid>
             </Grid>
           </Paper>
         </Grid>
