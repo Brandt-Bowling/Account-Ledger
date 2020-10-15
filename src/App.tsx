@@ -15,8 +15,6 @@ import AddIcon from '@material-ui/icons/Add';
 import { ResultLabel } from './ResultLabel';
 import { Label } from './Label';
 import Typography from '@material-ui/core/Typography';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
 
 const theme = createMuiTheme({
   palette: {
